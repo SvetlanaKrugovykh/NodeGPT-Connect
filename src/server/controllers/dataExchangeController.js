@@ -1,6 +1,4 @@
-const fs = require('fs')
 const path = require('path')
-const HttpError = require('http-errors')
 const openAiServcie = require('../services/openaiService')
 require('dotenv').config()
 

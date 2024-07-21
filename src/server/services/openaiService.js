@@ -1,25 +1,21 @@
+const { OpenAI } = require('openai')
 const axios = require('axios')
 require('dotenv').config()
 
 
 module.exports.generateTextService = async function (prompt) {
-  const url = 'https://api.openai.com/v1/completions'
-  const OPENAI_API_KEY = process.env.OPENAI_API_KEY
-  const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${OPENAI_API_KEY}`
-  }
-  const data = {
-    model: 'gpt-3.5-turbo',
-    prompt: prompt,
-    max_tokens: 150,
-    n: 1,
-    stop: null,
-    temperature: 0.7
-  }
-
   try {
-    const response = await axios.post(url, data, { headers: headers })
+    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
+      model: "gpt-3.5-turbo",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 150,
+      temperature: 0.7,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+    })
     const generatedText = response.data.choices[0].text.trim()
     console.log(generatedText)
     return generatedText
@@ -39,14 +35,11 @@ module.exports.generateTextService = async function (prompt) {
 }
 
 module.exports.getAvailableModels = async function () {
-  const url = 'https://api.openai.com/v1/models'
-  const OPENAI_API_KEY = process.env.OPENAI_API_KEY
-  const headers = {
-    'Authorization': `Bearer ${OPENAI_API_KEY}`
-  }
-
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
   try {
-    const response = await axios.get(url, { headers: headers })
+    const response = await openai.models.list()
     console.log('Available models:', response.data)
     return response.data
   } catch (error) {

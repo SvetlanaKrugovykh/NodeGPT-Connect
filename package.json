@@ -19,6 +19,7 @@
     "fastify-plugin": "^4.5.1",
     "http-errors": "^2.0.0",
     "ip-range-check": "^0.2.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "openai": "^4.52.7"
   }
 }
