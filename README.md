@@ -18,6 +18,6 @@ NodeGPT-Connect is a template for using in a future projects.
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/.../NodeGPT-Connect
-.git
+   git clone https://github.com/.../NodeGPT-Connect.git
+   .git
    ```
