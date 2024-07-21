@@ -1,21 +1,19 @@
 const { OpenAI } = require('openai')
-const axios = require('axios')
 require('dotenv').config()
 
 
 module.exports.generateTextService = async function (prompt) {
+  const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY,
+  })
+
   try {
-    const response = await axios.post('https://api.openai.com/v1/chat/completions', {
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt }],
-      max_tokens: 150,
-      temperature: 0.7,
-    }, {
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
+    const stream = await openai.chat.completions.create({
+      model: 'gpt-3.5-turbo',
+      messages: [{ role: 'user', content: prompt }],
+      stream: true,
     })
+    const response = await stream.result()
     const generatedText = response.data.choices[0].text.trim()
     console.log(generatedText)
     return generatedText
